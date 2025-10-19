@@ -13,17 +13,19 @@ class RawDelightToast extends StatefulWidget {
   final Function() getPosition;
 
   final Function() onRemove;
-  const RawDelightToast(
-      {super.key,
-      required this.child,
-      required this.animationDuration,
-      required this.snackbarPosition,
-      required this.snackbarDuration,
-      required this.onRemove,
-      this.autoDismiss = true,
-      required this.getPosition,
-      this.animationCurve,
-      required this.getscaleFactor});
+
+  const RawDelightToast({
+    super.key,
+    required this.child,
+    required this.animationDuration,
+    required this.snackbarPosition,
+    required this.snackbarDuration,
+    required this.onRemove,
+    this.autoDismiss = true,
+    required this.getPosition,
+    this.animationCurve,
+    required this.getscaleFactor,
+  });
 
   @override
   State<RawDelightToast> createState() => RawDelightToastState();
@@ -46,15 +48,16 @@ class RawDelightToastState extends State<RawDelightToast> {
       },
       effects: [
         SlideEffect(
-            begin: Offset(
-                0,
-                widget.snackbarPosition == DelightSnackbarPosition.bottom
-                    ? 2
-                    : -2),
-            end: Offset.zero,
-            duration: Duration(
-                milliseconds: 2 * widget.animationDuration.inMilliseconds),
-            curve: widget.animationCurve ?? Curves.elasticOut),
+          begin: Offset(
+            0,
+            widget.snackbarPosition == DelightSnackbarPosition.bottom ? 2 : -2,
+          ),
+          end: Offset.zero,
+          duration: Duration(
+            milliseconds: 2 * widget.animationDuration.inMilliseconds,
+          ),
+          curve: widget.animationCurve ?? Curves.elasticOut,
+        ),
         FadeEffect(duration: widget.animationDuration, begin: 0, end: 1),
         if (widget.autoDismiss)
           SlideEffect(
@@ -62,15 +65,21 @@ class RawDelightToastState extends State<RawDelightToast> {
             duration: const Duration(milliseconds: 500),
             curve: widget.animationCurve ?? Curves.easeInOut,
             begin: Offset.zero,
-            end: const Offset(-1, 0),
-          )
+            end: widget.snackbarPosition == DelightSnackbarPosition.top
+                ? const Offset(0, -3)
+                : const Offset(-1, 0),
+          ),
       ],
       child: Dismissible(
-          key: UniqueKey(),
-          onDismissed: (direction) {
-            widget.onRemove();
-          },
-          child: widget.child),
+        key: UniqueKey(),
+        direction: widget.snackbarPosition == DelightSnackbarPosition.top
+            ? DismissDirection.up
+            : DismissDirection.horizontal,
+        onDismissed: (direction) {
+          widget.onRemove();
+        },
+        child: widget.child,
+      ),
     );
   }
 
