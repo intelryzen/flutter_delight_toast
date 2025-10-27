@@ -62,7 +62,7 @@ class RawDelightToastState extends State<RawDelightToast> {
         if (widget.autoDismiss)
           SlideEffect(
             delay: widget.snackbarDuration,
-            duration: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 1000),
             curve: widget.animationCurve ?? Curves.easeInOut,
             begin: Offset.zero,
             end: widget.snackbarPosition == DelightSnackbarPosition.top
