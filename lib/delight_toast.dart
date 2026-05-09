@@ -28,19 +28,25 @@ class DelightToastBar {
   /// Animation Curve
   final Curve? animationCurve;
 
+  /// Maximum width of the toast container.
+  /// Beyond this width the toast is centered horizontally and the surrounding
+  /// area lets pointer events pass through to widgets behind it.
+  final double? maxWidth;
+
   /// Info on each snackbar
   late final SnackBarInfo info;
 
   /// Initialise Delight Toastbar with required parameters
   DelightToastBar(
       {this.snackbarDuration = const Duration(milliseconds: 5000),
-      this.position = DelightSnackbarPosition.bottom,
-      required this.builder,
-      this.animationDuration = const Duration(milliseconds: 700),
-      this.autoDismiss = false,
-      this.animationCurve})
+        this.position = DelightSnackbarPosition.bottom,
+        required this.builder,
+        this.animationDuration = const Duration(milliseconds: 700),
+        this.autoDismiss = false,
+        this.animationCurve,
+        this.maxWidth})
       : assert(
-            snackbarDuration.inMilliseconds > animationDuration.inMilliseconds);
+  snackbarDuration.inMilliseconds > animationDuration.inMilliseconds);
 
   /// Remove individual toasbars on dismiss
   void remove() {
@@ -65,6 +71,7 @@ class DelightToastBar {
         getPosition: () => calculatePosition(_toastBars, this),
         getscaleFactor: () => calculateScaleFactor(_toastBars, this),
         snackbarDuration: snackbarDuration,
+        maxWidth: maxWidth,
         onRemove: remove,
         child: builder.call(context),
       ),
